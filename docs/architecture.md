@@ -5,7 +5,7 @@ Each platform owns its UI, state and HTTP implementation. Shared behavior comes 
 ## Transport
 
 - Pairing: anonymous JSON redemption, followed by an authenticated server-info probe before persistence.
-- Requests: HTTPS, standard certificate trust, Basic `opencode:<token>`, no cookies and no redirects.
+- Requests: HTTPS (or explicitly confirmed private-IPv4 HTTP on Android), standard certificate trust, Basic `opencode:<token>`, no cookies and no redirects.
 - Writes: a single UI mutation gate; no application-level retries. Unknown delivery retains the draft and requires manual inspection before resend.
 - Events: live-only SSE treated as invalidation, never as a replayable log. Refresh canonical messages and pending approvals after connection and events. Coalesce bursts to avoid an unbounded event queue.
 - Lifecycle: close streaming in background, reconnect and snapshot on foreground. Work continues on the PC independent of mobile lifecycle.

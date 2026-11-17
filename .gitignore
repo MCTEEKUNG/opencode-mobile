@@ -8,3 +8,7 @@ DerivedData/
 ios/*.xcodeproj/
 __pycache__/
 .venv/
+.opencode/goals/
+*.jks
+*.keystore
+*.p12

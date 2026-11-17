@@ -26,6 +26,23 @@ class Vault(context: Context) {
                 .setBlockModes(KeyProperties.BLOCK_MODE_GCM).setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE).build())
         }.generateKey()
     }
+    fun history(computerId: String) = HistoryPresentation(
+        hidden = prefs.getBoolean("historyHidden:$computerId", false),
+        clearedThrough = prefs.getLong("historyCleared:$computerId", 0L))
+    fun saveHistory(computerId: String, history: HistoryPresentation) {
+        prefs.edit().putBoolean("historyHidden:$computerId", history.hidden)
+            .putLong("historyCleared:$computerId", history.clearedThrough).apply()
+    }
+    fun directory(computerId: String): String? = prefs.getString("directory:$computerId", null)
+    fun selectedProject(computerId: String): String? = prefs.getString("project:$computerId", null)
+    fun selectProject(computerId: String, directory: String?) {
+        prefs.edit().putString("project:$computerId", directory).apply()
+    }
+    fun rememberDirectory(computerId: String, directory: String) {
+        if (directory.isNotBlank()) prefs.edit().putString("directory:$computerId", directory).apply()
+    }
+    fun lastComputerId(): String? = prefs.getString("lastComputerId", null)
+    fun rememberComputer(id: String) { prefs.edit().putString("lastComputerId", id).apply() }
     fun load(): List<Computer> {
         val value = prefs.getString("computers", null) ?: return emptyList()
         val bytes = Base64.decode(value, Base64.NO_WRAP)
